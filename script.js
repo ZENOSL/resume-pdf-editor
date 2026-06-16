@@ -31,6 +31,7 @@ const cropState = {
   lastY: 0,
 };
 
+const DEFAULT_AVATAR_SRC = avatarPreview.getAttribute("src");
 const SIDEBAR_STORAGE_KEY = "resumeEditorSidebarCollapsed";
 
 function readSidebarPreference() {
@@ -78,6 +79,23 @@ function updatePdfLibraryState() {
 
 function setStatus(message) {
   statusText.textContent = message;
+}
+
+function initializeDefaultAvatar() {
+  if (!DEFAULT_AVATAR_SRC) return;
+
+  const image = new Image();
+  image.onload = () => {
+    cropState.image = image;
+    editAvatarBtn.disabled = false;
+    avatarButton.classList.add("has-image");
+  };
+  image.onerror = () => {
+    avatarButton.classList.remove("has-image");
+    editAvatarBtn.disabled = true;
+    setStatus("默认头像读取失败");
+  };
+  image.src = DEFAULT_AVATAR_SRC;
 }
 
 function openFilePicker() {
@@ -362,5 +380,6 @@ printBtn.addEventListener("click", () => {
 });
 
 setSidebarCollapsed(readSidebarPreference());
+initializeDefaultAvatar();
 updatePdfLibraryState();
 window.addEventListener("load", updatePdfLibraryState);
