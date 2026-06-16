@@ -6,6 +6,8 @@ const exportPdfBtn = document.querySelector("#exportPdfBtn");
 const printBtn = document.querySelector("#printBtn");
 const statusText = document.querySelector("#statusText");
 const resumeDocument = document.querySelector("#resumeDocument");
+const sidebarToggle = document.querySelector("#sidebarToggle");
+const sidebarContent = document.querySelector("#sidebarContent");
 
 const cropperModal = document.querySelector("#cropperModal");
 const closeCropperBtn = document.querySelector("#closeCropperBtn");
@@ -28,6 +30,40 @@ const cropState = {
   lastX: 0,
   lastY: 0,
 };
+
+const SIDEBAR_STORAGE_KEY = "resumeEditorSidebarCollapsed";
+
+function readSidebarPreference() {
+  try {
+    return localStorage.getItem(SIDEBAR_STORAGE_KEY) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function saveSidebarPreference(collapsed) {
+  try {
+    localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
+  } catch (error) {
+    // Storage can be unavailable in stricter browser modes.
+  }
+}
+
+function setSidebarCollapsed(collapsed) {
+  document.body.classList.toggle("sidebar-collapsed", collapsed);
+  sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+  sidebarToggle.setAttribute("aria-label", collapsed ? "展开操作栏" : "收起操作栏");
+  sidebarToggle.title = collapsed ? "展开操作栏" : "收起操作栏";
+  sidebarContent.setAttribute("aria-hidden", String(collapsed));
+  sidebarContent.inert = collapsed;
+  sidebarContent.toggleAttribute("inert", collapsed);
+}
+
+function toggleSidebar() {
+  const collapsed = !document.body.classList.contains("sidebar-collapsed");
+  setSidebarCollapsed(collapsed);
+  saveSidebarPreference(collapsed);
+}
 
 function getPdfExporter() {
   if (typeof window.html2pdf === "function") return window.html2pdf;
@@ -200,6 +236,7 @@ avatarButton.addEventListener("click", () => {
 
 editAvatarBtn.addEventListener("click", openCropper);
 closeCropperBtn.addEventListener("click", closeCropper);
+sidebarToggle.addEventListener("click", toggleSidebar);
 
 cropperModal.addEventListener("click", (event) => {
   if (event.target === cropperModal) closeCropper();
@@ -324,5 +361,6 @@ printBtn.addEventListener("click", () => {
   window.print();
 });
 
+setSidebarCollapsed(readSidebarPreference());
 updatePdfLibraryState();
 window.addEventListener("load", updatePdfLibraryState);

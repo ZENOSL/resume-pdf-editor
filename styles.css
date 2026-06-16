@@ -40,28 +40,70 @@ label {
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 292px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 292px;
+  transition: grid-template-columns 0.24s ease;
 }
 
 .control-panel {
+  order: 2;
   position: sticky;
   top: 0;
   height: 100vh;
   padding: 22px 18px;
   background: var(--panel);
-  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   gap: 18px;
   z-index: 20;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .panel-brand {
   display: flex;
   gap: 12px;
   align-items: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  min-width: 0;
+  flex: 1;
+}
+
+.panel-content {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sidebar-toggle {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0;
+  background: #fff;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+  box-shadow: 0 8px 18px rgba(46, 111, 208, 0.12);
+  outline: none;
 }
 
 .brand-mark {
@@ -77,7 +119,8 @@ label {
 
 .brand-mark svg,
 .tool-button svg,
-.icon-button svg {
+.icon-button svg,
+.sidebar-toggle svg {
   width: 21px;
   height: 21px;
   fill: none;
@@ -85,6 +128,29 @@ label {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+body.sidebar-collapsed .app-shell {
+  grid-template-columns: minmax(0, 1fr) 56px;
+}
+
+body.sidebar-collapsed .control-panel {
+  padding: 22px 9px;
+}
+
+body.sidebar-collapsed .panel-header {
+  justify-content: center;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+body.sidebar-collapsed .panel-brand,
+body.sidebar-collapsed .panel-content {
+  display: none;
+}
+
+body.sidebar-collapsed .sidebar-toggle svg {
+  transform: rotate(180deg);
 }
 
 .panel-brand h1 {
@@ -199,6 +265,7 @@ label {
 }
 
 .resume-stage {
+  order: 1;
   min-width: 0;
   padding: 34px clamp(18px, 4vw, 54px);
   overflow-x: auto;
@@ -582,8 +649,13 @@ li {
   .control-panel {
     position: static;
     height: auto;
-    border-right: 0;
+    border-left: 0;
     border-bottom: 1px solid var(--border);
+  }
+
+  body.sidebar-collapsed .control-panel {
+    min-height: 58px;
+    padding: 11px 14px;
   }
 
   .action-stack {
