@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>简历编辑器</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="vendor/html2pdf.bundle.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="control-panel no-print" aria-label="简历操作面板">
+      <div class="panel-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 3h7l5 5v13H7z" />
+            <path d="M14 3v5h5" />
+            <path d="M10 13h6" />
+            <path d="M10 17h5" />
+          </svg>
+        </span>
+        <div>
+          <h1>科研简历编辑器</h1>
+          <p>Academic Resume PDF</p>
+        </div>
+      </div>
+
+      <div class="action-stack">
+        <label class="tool-button" for="avatarInput">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.5 4h-5L7.8 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.8z" />
+            <circle cx="12" cy="13" r="3.5" />
+          </svg>
+          导入头像
+        </label>
+        <input id="avatarInput" class="file-input" type="file" accept="image/*" />
+
+        <button id="editAvatarBtn" class="tool-button" type="button" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+            <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+            <path d="m15 13 3-3 3 3" />
+          </svg>
+          调整头像
+        </button>
+
+        <button id="exportPdfBtn" class="tool-button primary" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v12" />
+            <path d="m7 10 5 5 5-5" />
+            <path d="M5 21h14" />
+          </svg>
+          导出 PDF
+        </button>
+
+        <button id="printBtn" class="tool-button" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9V2h12v7" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <path d="M6 14h12v8H6z" />
+          </svg>
+          打印保存
+        </button>
+      </div>
+
+      <div class="panel-card">
+        <h2>当前版本</h2>
+        <dl>
+          <div>
+            <dt>类型</dt>
+            <dd>科研型应届生</dd>
+          </div>
+          <div>
+            <dt>页数</dt>
+            <dd>固定三页 A4</dd>
+          </div>
+          <div>
+            <dt>内容</dt>
+            <dd>科研 / 竞赛 / 论文</dd>
+          </div>
+        </dl>
+      </div>
+
+      <p id="statusText" class="status-text" role="status" aria-live="polite">准备就绪</p>
+    </aside>
+
+    <main class="resume-stage">
+      <div id="resumeDocument" class="resume-document" aria-label="三页个人简历">
+        <article class="resume-sheet" aria-label="个人简历第一页">
+          <header class="resume-header">
+            <div class="identity-block">
+              <h2 class="candidate-name editable" contenteditable="true" spellcheck="false">小周</h2>
+              <p class="candidate-role editable" contenteditable="true" spellcheck="false">计算机视觉与数据智能方向 · 2026 届本科毕业生</p>
+              <p class="contact-line editable" contenteditable="true" spellcheck="false">
+                上海市浦东新区 | 138-0000-2026 | xiaozhou.research@gmail.com | GitHub: github.com/xiaozhou-lab | ORCID: 0000-0000-0000-0000
+              </p>
+            </div>
+
+            <button id="avatarButton" class="avatar-button no-print-focus" type="button" aria-label="导入或调整头像">
+              <img id="avatarPreview" alt="个人头像预览" />
+              <span id="avatarPlaceholder" class="avatar-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 21a8 8 0 0 0-16 0" />
+                  <circle cx="12" cy="8" r="4" />
+                </svg>
+                <small>头像</small>
+              </span>
+            </button>
+          </header>
+
+          <section class="resume-section">
+            <h3>SUMMARY</h3>
+            <p class="editable" contenteditable="true" spellcheck="false">
+              计算机相关专业应届毕业生，研究兴趣集中在计算机视觉、自然语言处理、数据挖掘与可信机器学习。熟悉 Python、PyTorch、scikit-learn、Pandas、MySQL、Linux 与基础工程化部署流程；具备从文献调研、数据构建、模型复现、实验设计、消融分析到论文撰写的完整科研训练。大学期间围绕遥感图像变化检测、学术推荐、中文技术文本实体识别与复杂网络分析完成多项研究型实践。
+            </p>
+          </section>
+
+          <section class="resume-section two-column">
+            <div>
+              <h3>EDUCATION</h3>
+              <div class="entry">
+                <div class="entry-head">
+                  <strong class="editable" contenteditable="true" spellcheck="false">上海海事大学 · 本科</strong>
+                  <span class="editable" contenteditable="true" spellcheck="false">2022.09 — 2026.06</span>
+                </div>
+                <p class="entry-role editable" contenteditable="true" spellcheck="false">GPA: 3.71 / 4.00 · 专业前 12% · 推免边缘候选</p>
+                <ul>
+                  <li class="editable" contenteditable="true" spellcheck="false">核心课程：数据结构、算法设计、操作系统、计算机网络、数据库系统、人工智能、机器学习、数字图像处理、软件工程。</li>
+                  <li class="editable" contenteditable="true" spellcheck="false">毕业论文：面向弱监督场景的遥感图像变化检测方法研究，重点关注伪标签噪声抑制与轻量化模型部署。</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h3>RESEARCH FOCUS</h3>
+              <ul class="tag-list">
+                <li class="editable" contenteditable="true" spellcheck="false">Computer Vision</li>
+                <li class="editable" contenteditable="true" spellcheck="false">Remote Sensing</li>
+                <li class="editable" contenteditable="true" spellcheck="false">Natural Language Processing</li>
+                <li class="editable" contenteditable="true" spellcheck="false">Data Mining</li>
+                <li class="editable" contenteditable="true" spellcheck="false">Graph Learning</li>
+                <li class="editable" contenteditable="true" spellcheck="false">Model Compression</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>TECHNICAL SKILLS</h3>
+            <div class="skill-grid">
+              <span class="editable" contenteditable="true" spellcheck="false"><strong>Languages</strong><br />Python, Java, JavaScript, SQL, LaTeX</span>
+              <span class="editable" contenteditable="true" spellcheck="false"><strong>ML / CV</strong><br />PyTorch, OpenCV, scikit-learn, NumPy, Pandas</span>
+              <span class="editable" contenteditable="true" spellcheck="false"><strong>NLP / Data</strong><br />Transformers, jieba, spaCy, ECharts, Matplotlib</span>
+              <span class="editable" contenteditable="true" spellcheck="false"><strong>Engineering</strong><br />Linux, Git, Docker, FastAPI, Spring Boot, MySQL</span>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>SELECTED HONORS</h3>
+            <div class="compact-list two-up">
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>全国大学生数学建模竞赛</strong>：省级二等奖，负责数据建模、误差分析与论文写作。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>蓝桥杯全国软件和信息技术专业人才大赛</strong>：省赛二等奖，算法方向。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>中国大学生计算机设计大赛</strong>：省级三等奖，作品方向为智能信息检索。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>大学生创新创业训练计划</strong>：省级立项，课题方向为中文技术文本知识抽取。</p>
+            </div>
+          </section>
+
+          <section class="resume-section two-column">
+            <div>
+              <h3>ACADEMIC TRAINING</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">系统阅读深度学习、计算机视觉、信息检索与图学习方向论文 40 余篇，整理复现笔记、模型结构图和实验参数表。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">能够独立完成数据集清洗、标注规范设计、训练脚本编写、指标统计、误差案例可视化和论文式报告撰写。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">熟悉科研实验中的版本管理、随机种子控制、消融实验设计、对比基线选择和可复现结果归档流程。</li>
+              </ul>
+            </div>
+            <div>
+              <h3>COURSEWORK HIGHLIGHTS</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">机器学习：完成 SVM、随机森林、XGBoost 与神经网络分类实验，对比准确率、召回率和 F1-score。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">数字图像处理：实现边缘检测、形态学处理、图像配准与分割算法，完成遥感变化检测前处理实验。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">数据库系统：设计规范化数据表、索引策略与查询优化方案，支撑科研数据管理和实验记录查询。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>RESEARCH STRENGTHS</h3>
+            <div class="compact-list two-up">
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>问题拆解：</strong>能将开放式课题转化为数据、模型、评价指标和可验证假设，避免只停留在概念描述。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>实验执行：</strong>能持续维护训练日志、配置文件、实验表格和误差样例，保证结果能回溯、能解释、能复现。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>工程落地：</strong>熟悉用 FastAPI、ECharts、Docker 与 Linux 搭建轻量 Demo，将研究结果转化为可演示系统。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>表达输出：</strong>能完成论文摘要、方法章节、实验章节、PPT 答辩材料和项目结题报告的结构化写作。</p>
+            </div>
+          </section>
+
+          <footer class="page-footer">Page 1 / 3 · Academic Resume</footer>
+        </article>
+
+        <article class="resume-sheet" aria-label="个人简历第二页">
+          <section class="resume-section page-leading">
+            <h3>RESEARCH EXPERIENCE</h3>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">弱监督遥感图像变化检测与轻量化分割模型研究</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2025.09 — 2026.05</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">本科毕业论文 / 计算机视觉实验室 · 第一负责人</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">围绕 LEVIR-CD、WHU-CD 等公开遥感变化检测数据集，复现 FC-EF、SNUNet、ChangeFormer 等基线方法，建立统一的数据划分、增强策略和指标评估脚本。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">针对像素级标注成本高的问题，构建基于类别激活图与边界一致性约束的弱监督伪标签生成流程，并引入置信度筛选降低噪声标签传播。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">设计轻量化双分支编码器，使用深度可分离卷积与注意力门控融合多尺度特征，在保持 F1-score 的同时减少参数量与推理耗时。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">完成消融实验、可视化误差分析和跨数据集泛化测试，输出 38 页论文初稿与可复现实验仓库。</li>
+              </ul>
+            </div>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">基于图神经网络的学术论文推荐与研究主题演化分析</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2025.03 — 2025.08</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">省级大创项目 · 核心成员 / 算法与实验负责人</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">从 DBLP、arXiv 开放元数据构建论文-作者-关键词异构图，清洗 12 万余条题录信息，规范作者消歧、关键词归一化与引用关系解析。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">实现 TF-IDF、Doc2Vec、SBERT 与 LightGCN 等推荐基线，对比内容相似度、协同过滤和图表示学习在冷启动论文推荐中的表现。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">设计时间切片主题演化分析流程，使用 BERTopic 与社区发现方法追踪研究热点迁移，形成可解释推荐理由与主题趋势图。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">负责实验记录、指标统计与结题材料撰写，项目通过中期检查并被推荐参加学院科研开放日展示。</li>
+              </ul>
+            </div>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">中文技术岗位文本中的技能实体识别与能力画像研究</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2024.10 — 2025.02</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">数据挖掘课程科研拓展 · 独立研究</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">构建中文技术岗位文本语料，定义编程语言、框架、中间件、数据库、算法能力和工程工具等实体标签体系。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">对比规则词典、BiLSTM-CRF 与 BERT-CRF 三类方法，分析长尾技能词、同义表达和复合短语对实体识别效果的影响。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">基于实体共现网络生成岗位能力图谱，将技能需求聚类为后端开发、数据分析、算法工程、测试开发等方向。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">最终形成课程研究报告、标注规范与可视化 Demo，用于展示数据采集、语料标注、模型训练和知识图谱构建流程。</li>
+              </ul>
+            </div>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">多模态语义检索在科研资料管理中的应用探索</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2024.06 — 2024.09</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">实验室开放课题 · 文献检索与 Demo 开发</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">围绕论文 PDF、实验截图和代码片段构建小规模科研资料库，抽取标题、摘要、图注、关键词和本地文件索引。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">对比 BM25、Sentence-BERT 与 CLIP 文图表示在跨模态检索中的效果，分析中文查询、英文摘要和图表截图之间的语义对齐问题。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">实现检索结果重排与高亮展示，支持按主题、年份、模型名称和实验指标过滤，方便论文精读和方案复盘。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section two-column">
+            <div>
+              <h3>EXPERIMENTAL PRACTICE</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">统一记录训练命令、超参数、数据版本、随机种子、硬件环境和 checkpoint 路径，减少结果不可追溯的问题。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">习惯为关键结论补充消融实验、错误样例和可视化热力图，避免只给出单一指标。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">能够根据验证集曲线判断欠拟合、过拟合、类别不均衡和伪标签噪声等常见问题。</li>
+              </ul>
+            </div>
+            <div>
+              <h3>REPRODUCIBILITY</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">为主要实验维护 README、环境依赖、数据路径说明、运行脚本和结果表格。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">使用 Git 分支隔离模型改动，保留 baseline、ablation、visualization 等实验版本。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">能将实验记录整理为答辩图表、论文表格和项目验收材料。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>DATASETS & METRICS</h3>
+            <div class="compact-list two-up">
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>视觉数据：</strong>使用 LEVIR-CD、WHU-CD、CDD 等公开数据集，熟悉遥感图像裁块、配准检查、类别不均衡处理和边界误差分析。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>文本数据：</strong>处理 DBLP、arXiv、中文岗位文本与课程语料，完成字段清洗、去重、实体标注和关键词归一化。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>评价指标：</strong>常用 Precision、Recall、F1-score、IoU、mAP、NDCG、HitRate 和消融对比表评价模型效果。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>可视化：</strong>能输出热力图、混淆矩阵、PR 曲线、主题演化图和错误案例面板，辅助定位模型瓶颈。</p>
+            </div>
+          </section>
+
+          <footer class="page-footer">Page 2 / 3 · Research Experience</footer>
+        </article>
+
+        <article class="resume-sheet" aria-label="个人简历第三页">
+          <section class="resume-section page-leading">
+            <h3>ADDITIONAL RESEARCH & OUTPUTS</h3>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">复杂网络中的影响力节点识别与信息扩散仿真</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2024.03 — 2024.08</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">数学建模延展研究 · 建模与程序实现</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">建立基于 PageRank、K-shell、介数中心性和局部结构熵的综合评分模型，在不同网络规模下评估关键节点识别稳定性。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">使用 SIR / IC 扩散模型进行仿真，对比单指标与融合指标在传播覆盖率、早期激活效率和鲁棒性上的差异。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">完成 Python 仿真实验脚本、参数敏感性分析和论文式报告，为数学建模竞赛论文提供核心方法支撑。</li>
+              </ul>
+            </div>
+
+            <div class="entry">
+              <div class="entry-head">
+                <strong class="editable" contenteditable="true" spellcheck="false">面向实验复现的模型训练记录与指标看板</strong>
+                <span class="editable" contenteditable="true" spellcheck="false">2025.06 — 2025.07</span>
+              </div>
+              <p class="entry-role editable" contenteditable="true" spellcheck="false">科研工具开发 · 独立完成</p>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">为多组深度学习实验设计 YAML 配置、日志解析和指标汇总流程，统一记录随机种子、数据增强、学习率计划和模型权重路径。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">使用 FastAPI、SQLite 与 ECharts 实现轻量级实验看板，支持曲线对比、最优 checkpoint 查询和消融实验备注。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">将原本分散在表格和截图中的实验结果整理为可追踪记录，降低论文写作阶段的指标回溯成本。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>PUBLICATIONS & MANUSCRIPTS</h3>
+            <div class="compact-list">
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>[Manuscript]</strong> 小周等，弱监督遥感图像变化检测中的伪标签置信度校准方法，本科毕业论文扩展稿，拟投稿中文核心学生专栏。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>[Report]</strong> 基于异构图表示学习的学术论文推荐系统研究，省级大学生创新创业训练计划结题报告，2025。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>[Technical Note]</strong> 中文技术岗位技能实体识别标注规范与模型对比实验，课程研究报告，2025。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>[Poster]</strong> 弱监督变化检测中的边界一致性约束与误差可视化分析，学院本科生科研开放日展示海报，2026。</p>
+            </div>
+          </section>
+
+          <section class="resume-section two-column">
+            <div>
+              <h3>COMPETITIONS</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">全国大学生数学建模竞赛省级二等奖：负责数据建模、算法实现、稳定性分析与论文排版。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">蓝桥杯省赛二等奖：完成动态规划、图搜索、字符串处理与复杂度优化训练。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">中国大学生计算机设计大赛省级三等奖：负责智能检索模块、实验展示和答辩材料。</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>LAB PRACTICE</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">每周参与论文精读，汇报过 SAM、CLIP、ChangeFormer、LightGCN 等方向论文。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">熟悉 Git 分支协作、实验环境记录、LaTeX 写作和基础 Linux 服务器使用。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">可承担数据清洗、模型复现、实验对比、可视化分析与科研 Demo 开发。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>SELF ASSESSMENT</h3>
+            <p class="editable" contenteditable="true" spellcheck="false">
+              具备较强的自学能力和持续投入能力，能在资料不完整、实验指标波动和方案多次迭代的情况下保持记录、复盘和推进。暂无正式企业实习经历，但已接受较系统的科研训练，能够将开放问题拆解为可验证假设、可复现实验和可展示结果。
+            </p>
+          </section>
+
+          <section class="resume-section two-column">
+            <div>
+              <h3>OPEN SOURCE & DEMOS</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">维护遥感变化检测实验仓库，包含数据预处理、训练配置、推理脚本、指标计算和可视化示例。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">开发科研实验记录看板，支持实验分组、曲线对比、最优模型检索和备注归档。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">整理中文技能实体识别标注样例与词表，方便后续扩展为课程数据集。</li>
+              </ul>
+            </div>
+            <div>
+              <h3>PRESENTATION</h3>
+              <ul>
+                <li class="editable" contenteditable="true" spellcheck="false">可独立完成 10-15 分钟科研汇报，覆盖背景、方法、实验、结论和后续计划。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">擅长将模型结构、数据流和实验结论整理为图表，便于答辩和小组讨论。</li>
+                <li class="editable" contenteditable="true" spellcheck="false">能根据老师反馈快速修改论文段落、实验表格和演示材料。</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="resume-section">
+            <h3>WORKING STYLE</h3>
+            <div class="compact-list two-up">
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>记录习惯：</strong>每组实验保留动机、配置、指标、截图和结论，方便复盘时快速判断方案价值。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>协作方式：</strong>接受明确任务后会先确认输入、输出、评估方式和截止时间，再拆分实现步骤。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>学习节奏：</strong>遇到陌生方向会优先读综述、跑 baseline、复现关键图表，再逐步替换模块。</p>
+              <p class="editable" contenteditable="true" spellcheck="false"><strong>岗位匹配：</strong>适合算法工程、数据挖掘、科研助理、后端数据平台和 AI 应用开发等应届生岗位。</p>
+            </div>
+          </section>
+
+          <footer class="page-footer">Page 3 / 3 · Outputs & Practice</footer>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <div id="cropperModal" class="cropper-modal no-print" hidden>
+    <div class="cropper-dialog" role="dialog" aria-modal="true" aria-labelledby="cropperTitle">
+      <header class="cropper-head">
+        <h2 id="cropperTitle">头像编辑</h2>
+        <button id="closeCropperBtn" class="icon-button" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="cropper-body">
+        <canvas id="cropCanvas" width="360" height="360" aria-label="头像裁剪画布"></canvas>
+
+        <div class="crop-controls">
+          <label for="zoomRange">缩放</label>
+          <input id="zoomRange" type="range" min="0.6" max="3" step="0.01" value="1" />
+
+          <div class="button-row">
+            <button id="rotateLeftBtn" class="tool-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 3-6.7" />
+                <path d="M3 4v6h6" />
+              </svg>
+              左旋
+            </button>
+            <button id="rotateRightBtn" class="tool-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 12a9 9 0 1 1-3-6.7" />
+                <path d="M21 4v6h-6" />
+              </svg>
+              右旋
+            </button>
+          </div>
+
+          <div class="button-row">
+            <button id="resetCropBtn" class="tool-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 12a9 9 0 0 1 15.5-6.2" />
+                <path d="M18 2v4h-4" />
+                <path d="M21 12a9 9 0 0 1-15.5 6.2" />
+                <path d="M6 22v-4h4" />
+              </svg>
+              重置
+            </button>
+            <button id="applyCropBtn" class="tool-button primary" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" />
+              </svg>
+              应用
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
